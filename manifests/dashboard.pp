@@ -77,14 +77,6 @@ class murano::dashboard(
     tag    => ['openstack', 'murano-packages'],
   }
 
-  concat { $::murano::params::local_settings_path: }
-
-  concat::fragment { 'original_config':
-    target => $::murano::params::local_settings_path,
-    source => $::murano::params::local_settings_path,
-    order  => 1,
-  }
-
   concat::fragment { 'murano_dashboard_section':
     target  => $::murano::params::local_settings_path,
     content => template('murano/local_settings.py.erb'),

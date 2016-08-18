@@ -10,4 +10,5 @@ MURANO_USE_GLARE = True
 <% else %>
 MURANO_USE_GLARE = False
 <% end %>
+<% if @dashboard_name != nil %>MURANO_DASHBOARD_NAME ='<%= @dashboard_name %>'<% end %>
 ## MURANO_CONFIG_END ##

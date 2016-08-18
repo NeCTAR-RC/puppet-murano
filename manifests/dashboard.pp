@@ -72,24 +72,10 @@ class murano::dashboard(
     tag    => ['openstack', 'murano-packages'],
   }
 
-  concat { $::murano::params::local_settings_path: }
-
-  concat::fragment { 'original_config':
-    target => $::murano::params::local_settings_path,
-    source => $::murano::params::local_settings_path,
-    order  => 1,
-  }
-
   concat::fragment { 'murano_dashboard_section':
     target  => $::murano::params::local_settings_path,
     content => template('murano/local_settings.py.erb'),
-    order   => 2,
-  }
-
-  exec { 'clean_horizon_config':
-    command => "sed -e '/^## MURANO_CONFIG_BEGIN/,/^## MURANO_CONFIG_END ##/ d' -i ${::murano::params::local_settings_path}",
-    onlyif  => "grep '^## MURANO_CONFIG_BEGIN' ${::murano::params::local_settings_path}",
-    path    => [ '/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/' ],
+    order   => 90,
   }
 
   if $::os_package_type == 'ubuntu' {
@@ -100,29 +86,17 @@ class murano::dashboard(
 
   exec { 'django_collectstatic':
     command     => $collect_static_command,
-    environment => [
-      "APACHE_USER=${::apache::params::user}",
-      "APACHE_GROUP=${::apache::params::group}",
-    ],
     refreshonly => true,
   }
 
   exec { 'django_compressstatic':
     command     => "${collect_static_script} compress --force",
-    environment => [
-      "APACHE_USER=${::apache::params::user}",
-      "APACHE_GROUP=${::apache::params::group}",
-    ],
     refreshonly => true,
   }
 
   if $sync_db {
     exec { 'django_syncdb':
       command     => "${collect_static_script} migrate --noinput",
-      environment => [
-        "APACHE_USER=${::apache::params::user}",
-        "APACHE_GROUP=${::apache::params::group}",
-      ],
       refreshonly => true,
     }
 
@@ -131,10 +105,9 @@ class murano::dashboard(
         ~> Service <| title == 'httpd' |>
   }
 
-  Package['murano-dashboard']
-    -> Exec['clean_horizon_config']
-      -> Concat[$::murano::params::local_settings_path]
-        -> Service <| title == 'httpd' |>
+  Package['murano-dashboard'] ->
+    Concat[$::murano::params::local_settings_path] ->
+      Service <| title == 'httpd' |>
 
   Package['murano-dashboard']
     ~> Exec['django_collectstatic']

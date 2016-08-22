@@ -75,13 +75,7 @@ class murano::dashboard(
   concat::fragment { 'murano_dashboard_section':
     target  => $::murano::params::local_settings_path,
     content => template('murano/local_settings.py.erb'),
-    order   => 2,
-  }
-
-  exec { 'clean_horizon_config':
-    command => "sed -e '/^## MURANO_CONFIG_BEGIN/,/^## MURANO_CONFIG_END ##/ d' -i ${::murano::params::local_settings_path}",
-    onlyif  => "grep '^## MURANO_CONFIG_BEGIN' ${::murano::params::local_settings_path}",
-    path    => [ '/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/' ],
+    order   => 90,
   }
 
   if $::os_package_type == 'ubuntu' {
@@ -124,9 +118,8 @@ class murano::dashboard(
   }
 
   Package['murano-dashboard'] ->
-    Exec['clean_horizon_config'] ->
-      Concat[$::murano::params::local_settings_path] ->
-        Service <| title == 'httpd' |>
+    Concat[$::murano::params::local_settings_path] ->
+      Service <| title == 'httpd' |>
 
   Package['murano-dashboard'] ~>
     Exec['django_collectstatic'] ~>

@@ -80,7 +80,7 @@ class murano::dashboard(
   concat::fragment { 'murano_dashboard_section':
     target  => $::murano::params::local_settings_path,
     content => template('murano/local_settings.py.erb'),
-    order   => 100,
+    order   => 90,
   }
 
   exec { 'django_collectstatic':

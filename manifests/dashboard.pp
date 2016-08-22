@@ -60,6 +60,7 @@ class murano::dashboard(
   $max_file_size         = '5',
   $dashboard_debug_level = 'DEBUG',
   $client_debug_level    = 'ERROR',
+  $logging_handler       = 'syslog',
   $sync_db               = true,
   # DEPRECATED PARAMETERS
   $api_url               = undef,

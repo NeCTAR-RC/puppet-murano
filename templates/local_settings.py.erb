@@ -2,9 +2,9 @@
 <% if @api_url != nil %>MURANO_API_URL = '<%= @api_url %>'<% end %>
 <% if @repo_url != nil %>MURANO_REPO_URL = '<%= @repo_url %>'<% end %>
 MAX_FILE_SIZE_MB = '<%= @max_file_size %>'
-METADATA_CACHE_DIR = '<%= @metadata_dir %>'
-LOGGING['loggers']['muranodashboard'] = {'handlers': ['syslog'], 'level': '<%= @dashboard_debug_level %>'}
-LOGGING['loggers']['muranoclient'] = {'handlers': ['syslog'], 'level': '<%= @client_debug_level %>'}
+<% if @metadata_dir != nil %>METADATA_CACHE_DIR = '<%= @metadata_dir %>'<% end %>
+LOGGING['loggers']['muranodashboard'] = {'handlers': ['<%= @logging_handler %>'], 'level': '<%= @dashboard_debug_level %>'}
+LOGGING['loggers']['muranoclient'] = {'handlers': ['<%= @logging_handler %>'], 'level': '<%= @client_debug_level %>'}
 <% if @enable_glare %>
 MURANO_USE_GLARE = True
 <% else %>

@@ -85,30 +85,18 @@ class murano::dashboard(
   }
 
   exec { 'django_collectstatic':
-    command     => $collect_static_command,
-    environment => [
-      "APACHE_USER=${::apache::params::user}",
-      "APACHE_GROUP=${::apache::params::group}",
-    ],
+    command     => "${collect_static_script} collectstatic --noinput",
     refreshonly => true,
   }
 
   exec { 'django_compressstatic':
     command     => "${collect_static_script} compress --force",
-    environment => [
-      "APACHE_USER=${::apache::params::user}",
-      "APACHE_GROUP=${::apache::params::group}",
-    ],
     refreshonly => true,
   }
 
   if $sync_db {
     exec { 'django_syncdb':
       command     => "${collect_static_script} migrate --noinput",
-      environment => [
-        "APACHE_USER=${::apache::params::user}",
-        "APACHE_GROUP=${::apache::params::group}",
-      ],
       refreshonly => true,
     }
 

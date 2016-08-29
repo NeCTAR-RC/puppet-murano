@@ -80,6 +80,10 @@
 #  (Optional) Virtual host for murano rabbit server
 #  Defaults to 'murano'
 #
+# [*service_url*]
+#  (Optional) URL for the API service
+#  Defaults to undef
+#
 # [*service_host*]
 #  (Optional) Host for murano to listen on
 #  Defaults to '0.0.0.0'
@@ -212,6 +216,7 @@ class murano(
   $rabbit_own_user         = 'guest',
   $rabbit_own_password     = 'guest',
   $rabbit_own_vhost        = 'murano',
+  $service_url             = undef,
   $service_host            = '127.0.0.1',
   $service_port            = '8082',
   $use_ssl                 = false,
@@ -252,11 +257,6 @@ class murano(
     tag    => ['openstack', 'murano-package'],
   }
 
-  $service_protocol = $use_ssl ? {
-    true    => 'https',
-    default => 'http',
-  }
-
   murano_config {
     'networking/router_name':   value => $default_router;
     'networking/create_router': value => $use_neutron;
@@ -292,10 +292,21 @@ class murano(
     }
   }
 
+  if $service_url {
+    $url = $service_url
+  }
+  else {
+    $service_protocol = $use_ssl ? {
+      true    => 'https',
+      default => 'http',
+    }
+    $url = "${service_protocol}://${service_host}:${service_port}"
+  }
+
   murano_config {
     'DEFAULT/notification_driver' :            value => $notification_driver;
 
-    'murano/url' :                             value => "${service_protocol}://${service_host}:${service_port}";
+    'murano/url' :                             value => $url;
 
     'engine/use_trusts' :                      value => $use_trusts;
 

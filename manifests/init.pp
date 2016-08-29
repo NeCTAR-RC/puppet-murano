@@ -124,6 +124,10 @@
 #   for murano rabbit server.
 #   Defaults to $::os_service_default
 #
+# [*service_url*]
+#  (Optional) URL for the API service
+#  Defaults to undef
+#
 # [*service_host*]
 #  (Optional) Host for murano to listen on
 #  Defaults to '127.0.0.1'
@@ -297,6 +301,7 @@ class murano(
   $rabbit_own_vhost        = 'murano',
   $rabbit_own_use_ssl      = $::os_service_default,
   $rabbit_own_ca_certs     = $::os_service_default,
+  $service_url             = undef,
   $service_host            = '127.0.0.1',
   $service_port            = '8082',
   $use_ssl                 = false,
@@ -404,10 +409,21 @@ deprecated. Please use murano::default_transport_url instead.")
     }
   }
 
+  if $service_url {
+    $url = $service_url
+  }
+  else {
+    $service_protocol = $use_ssl ? {
+      true    => 'https',
+      default => 'http',
+    }
+    $url = "${service_protocol}://${service_host}:${service_port}"
+  }
+
   murano_config {
-    'murano/url' :                           value => "${service_protocol}://${service_host}:${service_port}";
 
     'engine/use_trusts' :                    value => $use_trusts;
+    'murano/url' :                           value => $url;
 
     'rabbitmq/login' :                       value => $rabbit_own_user;
     'rabbitmq/password' :                    value => $rabbit_own_password;

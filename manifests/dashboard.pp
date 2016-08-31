@@ -32,7 +32,7 @@
 #
 # [*metadata_dir*]
 #  (Optional) Directory to store murano dashboard metadata cache
-#  Defaults to 'undef'
+#  Defaults to '/var/cache/murano-dashboard'
 #
 # [*max_file_size*]
 #  (Optional) Maximum allowed filesize to upload
@@ -56,7 +56,7 @@ class murano::dashboard(
   $repo_url              = undef,
   $enable_glare          = false,
   $collect_static_script = '/usr/share/openstack-dashboard/manage.py',
-  $metadata_dir          = undef,
+  $metadata_dir          = '/var/cache/murano-dashboard',
   $max_file_size         = '5',
   $dashboard_debug_level = 'DEBUG',
   $client_debug_level    = 'ERROR',

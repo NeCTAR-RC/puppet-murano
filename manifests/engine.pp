@@ -24,7 +24,7 @@ class murano::engine(
   $manage_service = true,
   $enabled        = true,
   $package_ensure = 'present',
-  $workers        = $::os_service_default,
+  $workers        = $::os_workers,
 ) {
 
   include ::murano::deps

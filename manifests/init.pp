@@ -238,7 +238,7 @@
 #   in the murano config.
 #   Defaults to false.
 #
-# [*amqp_durable_queues]
+# [*amqp_durable_queues*]
 #   (optional) Whether to use durable queues in AMQP.
 #   Defaults to false.
 #

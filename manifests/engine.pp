@@ -18,7 +18,7 @@
 #
 # [*workers*]
 #  (Optional) Number of workers for Murano Engine
-#  Defaults to $::os_service_default
+#  Defaults to $::os_workers
 #
 class murano::engine(
   $manage_service = true,

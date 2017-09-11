@@ -6,14 +6,14 @@ describe 'murano::engine' do
     it { is_expected.to contain_class('murano::engine') }
 
     context 'with default params' do
-      it { is_expected.to contain_murano_config('engine/workers').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_murano_config('engine/engine_workers').with_value(facts[:os_workers]) }
     end
 
     context 'with passed workers' do
       let :params do {
-         :workers => '2',
+         :engine_workers => '2',
       } end
-      it { is_expected.to contain_murano_config('engine/workers').with_value('2') }
+      it { is_expected.to contain_murano_config('engine/engine_workers').with_value('2') }
     end
   end
 

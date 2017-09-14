@@ -11,7 +11,7 @@ describe 'murano::engine' do
 
     context 'with passed workers' do
       let :params do {
-         :engine_workers => '2',
+         :workers => '2',
       } end
       it { is_expected.to contain_murano_config('engine/engine_workers').with_value('2') }
     end

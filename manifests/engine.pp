@@ -16,7 +16,7 @@
 #  (Optional) Ensure state for package
 #  Defaults to 'present'
 #
-# [*engine_workers*]
+# [*workers*]
 #  (Optional) Number of workers for Murano Engine
 #  Defaults to $::os_workers
 #
@@ -24,7 +24,7 @@ class murano::engine(
   $manage_service = true,
   $enabled        = true,
   $package_ensure = 'present',
-  $engine_workers = $::os_workers,
+  $workers        = $::os_workers,
 ) {
 
   include ::murano::deps
@@ -40,7 +40,7 @@ class murano::engine(
   }
 
   murano_config {
-    'engine/engine_workers': value => $engine_workers;
+    'engine/engine_workers': value => $workers;
   }
 
   package { 'murano-engine':

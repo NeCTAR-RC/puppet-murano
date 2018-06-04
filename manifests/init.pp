@@ -464,6 +464,13 @@ deprecated. Please use murano::default_transport_url instead.")
     memcached_servers   => $memcached_servers,
   }
 
+  murano_config {
+    'keystone_authtoken/admin_tenant_name' : value => $admin_tenant_name;
+    'keystone_authtoken/admin_user' :        value => $admin_user;
+    'keystone_authtoken/admin_password' :    value => $admin_password, secret => true;
+    'keystone_authtoken/identity_uri' :      value => $identity_uri;
+  }
+
   oslo::messaging::rabbit { 'murano_config':
     kombu_ssl_version       => $kombu_ssl_version,
     kombu_ssl_keyfile       => $kombu_ssl_keyfile,

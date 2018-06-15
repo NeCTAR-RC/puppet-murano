@@ -223,6 +223,10 @@
 #  (Optional) Public identity endpoint
 #  Defaults to 'http://127.0.0.1:5000/v3'
 #
+# [*auth_type*]
+#  (Optional) Authentication type
+#  Defaults to 'password'
+#
 # [*user_domain_name*]
 #   (Optional) Name of domain for $username
 #   Defaults to 'Default'
@@ -297,6 +301,7 @@ class murano(
   $admin_user                 = 'murano',
   $admin_tenant_name          = 'services',
   $www_authenticate_uri       = 'http://127.0.0.1:5000/v3',
+  $auth_type                  = 'password',
   $user_domain_name           = 'Default',
   $project_domain_name        = 'Default',
   $memcached_servers          = $::os_service_default,
@@ -383,12 +388,16 @@ class murano(
 
     'networking/default_dns': value => $default_nameservers;
 
-    'engine/packages_service': value => $packages_service,
+    'engine/packages_service': value => $packages_service;
+
+    'murano_auth/www_authenticate_uri': value => $auth_uri;
+    'murano_auth/auth_section':         value => 'keystone_authtoken';
   }
 
   keystone::resource::authtoken { 'murano_config':
     www_authenticate_uri => $www_authenticate_uri,
     auth_url             => $identity_uri,
+    auth_type            => $auth_type,
     username             => $admin_user,
     password             => $admin_password,
     project_name         => $admin_tenant_name,

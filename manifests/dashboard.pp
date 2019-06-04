@@ -53,6 +53,10 @@
 #  (Optional) Filter image list by project ID
 #  Defaults to 'undef'
 #
+# [*dashboard_package_name*]
+#  (Optional) Dashboard package name if required to override
+#  Defaults to 'undef'
+#
 class murano::dashboard(
   $package_ensure          = 'present',
   $dashboard_name          = undef,
@@ -66,14 +70,23 @@ class murano::dashboard(
   $log_handler             = 'file',
   $sync_db                 = true,
   $image_filter_project_id = undef,
+  $dashboard_package_name  = undef,
 ) {
 
   include ::murano::deps
   include ::murano::params
 
+  # This fix is only required during the transision period between running
+  # rocky and stein. Can be removed once on stein
+  if $dashboard_package_name {
+    $_dashboard_package_name = $dashboard_package_name
+  } else {
+    $_dashboard_package_name = $::murano::params::dashboard_package_name
+  }
+
   package { 'murano-dashboard':
     ensure => $package_ensure,
-    name   => $::murano::params::dashboard_package_name,
+    name   => $_dashboard_package_name,
     tag    => ['openstack', 'murano-packages'],
   }
 

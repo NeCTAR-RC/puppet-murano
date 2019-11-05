@@ -1,6 +1,34 @@
 {
     "author": "Red Hat and OpenStack Contributors",
     "dependencies": [
+        {
+            "name": "puppetlabs/inifile",
+            "version_requirement": ">=2.0.0 <3.0.0"
+        },
+        {
+            "name": "openstack/keystone",
+            "version_requirement": ">=14.4.0 <15.0.0"
+        },
+        {
+            "name": "puppetlabs/rabbitmq",
+            "version_requirement": ">=8.4.0 <9.0.0"
+        },
+        {
+            "name": "puppetlabs/mysql",
+            "version_requirement": ">=6.0.0 <9.0.0"
+        },
+        {
+            "name": "puppetlabs/stdlib",
+            "version_requirement": ">=5.0.0 <6.0.0"
+        },
+        {
+            "name": "openstack/openstacklib",
+            "version_requirement": ">=14.4.0 <15.0.0"
+        },
+        {
+            "name": "openstack/oslo",
+            "version_requirement": ">=14.4.0 <15.0.0"
+        }
     ],
     "description": "Installs and configures OpenStack Murano (Application Catalog).",
     "issues_url": "https://bugs.launchpad.net/puppet-murano",
